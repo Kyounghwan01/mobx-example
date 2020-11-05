@@ -10,24 +10,12 @@ export interface Todo {
 
 class TodoStore {
   constructor() {
+    this.fetchApi = this.fetchApi.bind(this);
     reaction(
       () => this.todos,
       (_) => console.log(this.todos.length)
     );
   }
-
-  apis = function (params: boolean) {
-    return new Promise((res) => {
-      window.setTimeout(function () {
-        console.log(222);
-        if (params) {
-          res("ok");
-        } else {
-          res("error");
-        }
-      }, 1000);
-    });
-  };
 
   @observable todos: Todo[] = [
     { id: uuidv4(), title: "Item #1", completed: false },
@@ -43,9 +31,6 @@ class TodoStore {
 
   @action addTodo = (todo: Todo) => {
     this.todos.push({ ...todo, id: uuidv4() });
-    console.log(3);
-    const res = this.apis(true);
-    console.log(res);
   };
 
   @action toggleTodo = (id: string) => {
@@ -60,7 +45,14 @@ class TodoStore {
     });
   };
 
+  /**
+   * 1. console.log 1 찍힘
+   * 2. console.log res 찍힘
+   * 3. res가 ok라면 toggleTodo 함수 실행됨
+   */
+
   fetchApi = flow(function* (id: string) {
+    console.log(1);
     const newapis = function (params: boolean) {
       return new Promise((res) => {
         window.setTimeout(function () {
@@ -69,14 +61,18 @@ class TodoStore {
           } else {
             res("error");
           }
-        }, 1000);
+        }, 3000);
       });
     };
-    const res = yield newapis(true);
-    if (res === "ok") {
-      this.toggleTodo(id);
+    try {
+      const res = yield newapis(true);
+      if (res === "ok") {
+        this.toggleTodo(id);
+      }
+    } catch (e) {
+      console.log(e.message);
     }
-  }).bind(this);
+  });
 
   // fetchApi = (params: boolean) => {
   //   return new Promise((res) => {

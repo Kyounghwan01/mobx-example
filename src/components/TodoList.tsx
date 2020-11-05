@@ -29,6 +29,12 @@ const TodoList = () => {
                     Toggle
                   </button>
                   <button
+                    className="btn btn-sm btn-info"
+                    onClick={(_) => fetchApi(todo.id!).cancel()}
+                  >
+                    test
+                  </button>
+                  <button
                     className="btn btn-sm btn-danger"
                     onClick={(_) => removeTodo(todo.id!)}
                   >

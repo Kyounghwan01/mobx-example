@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 
 const TodoList = () => {
   const todoStore = useContext(TodoStore);
-  const { todos, toggleTodo, removeTodo } = todoStore;
+  const { todos, toggleTodo, removeTodo, fetchApi } = todoStore;
   return (
     <>
       <div className="row">
@@ -24,7 +24,7 @@ const TodoList = () => {
                 <td>
                   <button
                     className="btn btn-sm btn-info"
-                    onClick={(_) => toggleTodo(todo.id!)}
+                    onClick={(_) => fetchApi(todo.id!)}
                   >
                     Toggle
                   </button>
